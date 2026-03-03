@@ -5,6 +5,8 @@
 
 config NETUTILS_TINYSSH
 	tristate "TinySSH SSH server"
+        depends on PIPES 
+        depends on PSEUDOTERM
 	default n
 	---help---
 		Enable the TinySSH SSH server
