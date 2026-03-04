@@ -7,6 +7,7 @@ Public domain.
 The 'channel' library is used to handle data from/to SSH channel (rfc4254).
 */
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -172,6 +173,7 @@ int channel_exec(const char *cmd) {
     if (channel.maxpacket == 0) bug_proto();
     if (channel.pid != 0) bug_proto();
 
+#ifdef TINYSSH_CREATE_TERMINAL_SESSION
     if (channel.flagterminal) {
         channel.pid = channel_forkpty(fd, channel.master, channel.slave);
         if (channel.pid > 0) {
@@ -201,6 +203,14 @@ int channel_exec(const char *cmd) {
         newenv_exec(shell, run);
         _exit(111);
     }
+#else
+    fd[0] = fd[1] = fd[2] = -1;
+    printf("%s:%d Need to create terminal session...\n", __FUNCTION__, __LINE__);
+    UNUSED(ln);
+    UNUSED(name);
+    UNUSED(shell);
+    UNUSED(run);
+#endif
     channel.fd0 = fd[0];
     channel.fd1 = fd[1];
     channel.fd2 = fd[2];

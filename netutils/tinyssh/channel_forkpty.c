@@ -5,6 +5,7 @@ Jan Mojzis
 Public domain.
 */
 
+#include <stdio.h>
 #include <unistd.h>
 #if defined(sun) || defined(__hpux)
 #include <sys/stropts.h>
@@ -15,10 +16,18 @@ Public domain.
 #include <termios.h>
 #include <sys/ioctl.h>
 extern char *ptsname(int);
+#ifndef grantpt
 extern int grantpt(int);
+#endif
 extern int unlockpt(int);
 
+#include "hassetsid.h"
+
 #include "hasopenpty.h"
+#ifdef HASSETSID
+extern pid_t setsid(void);
+#endif
+
 #ifdef HASOPENPTY
 extern int openpty(int *, int *, char *, struct termios *, struct winsize *);
 #endif
@@ -39,7 +48,12 @@ static int login_tty_(int fd) {
 
     char *name;
 
+#ifdef HAVESETSID
     setsid();
+#else
+    /* Nuttx doesn't provide setsid(). Not currnetly sure how to replace it */
+    printf("Need replacement for setsid()\n");
+#endif
 
 #ifdef TIOCSCTTY
     if (ioctl(fd, TIOCSCTTY, (char *) 0) == -1) return -1;
