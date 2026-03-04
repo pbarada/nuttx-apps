@@ -7,6 +7,7 @@ Public domain.
 #ifndef PACKET_H____
 #define PACKET_H____
 
+#include <nuttx/config.h>
 #include "buf.h"
 #include "crypto_uint32.h"
 #include "crypto_uint8.h"
@@ -15,10 +16,14 @@ Public domain.
 #include "channel.h"
 
 #define PACKET_UNAUTHENTICATED_MESSAGES 30
-#define PACKET_LIMIT 32768
-#define PACKET_FULLLIMIT 35000
+/* Make PACKET_LIMIT configurable; originally 32768 */
+#define PACKET_LIMIT CONFIG_NETUTILS_TINYSSH_PACKET_LIMIT
+/* Make PACKET_FULLLIMIT configurable; originally 35000 */
+#define PACKET_FULLLIMIT CONFIG_NETUTILS_TINYSSH_PACKET_FULLLIMIT
 
-#define PACKET_RECVLIMIT 131072
+/* Make PACKET_RECVLIMIT configurable; originally 131072 */
+#define PACKET_RECVLIMIT CONFIG_NETUTILS_TINYSSH_PACKET_RECVLIMIT
+
 #define PACKET_ZEROBYTES 64
 
 struct packet {

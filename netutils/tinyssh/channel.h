@@ -1,12 +1,14 @@
 #ifndef CHANNEL_H____
 #define CHANNEL_H____
 
+#include <nuttx/config.h>
 #include "crypto_uint32.h"
 #include "iptostr.h"
 #include "porttostr.h"
 #include "limit.h"
 
-#define CHANNEL_BUFSIZE 131072
+/* Make CHANNEL_BUFSIZE configurable; origianlly 131072 */
+#define CHANNEL_BUFSIZE CONFIG_NETUTILS_TINYSSH_CHANNEL_BUFSIZE
 
 struct channel {
 

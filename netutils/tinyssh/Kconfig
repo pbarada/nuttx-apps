@@ -3,15 +3,44 @@
 # see the file kconfig-language.txt in the NuttX tools repository.
 #
 
-config NETUTILS_TINYSSH
-	tristate "TinySSH SSH server"
+
+menuconfig NETUTILS_TINYSSH
+	bool "TinySSH SSH server"
+	default n
         depends on PIPES 
         depends on PSEUDOTERM
-	default n
 	---help---
 		Enable the TinySSH SSH server
 
 if NETUTILS_TINYSSH
+
+config NETUTILS_TINYSSH_CHANNEL_BUFSIZE
+	int "channel buffer size"
+	default 131072
+	---help---
+        	Size of buf0 array in channel structure.
+
+config NETUTILS_TINYSSH_PACKET_LIMIT
+	int "packet limit"
+        default 32768
+        ---help---
+		Packet limit size.
+
+config NETUTILS_TINYSSH_PACKET_FULLLIMIT
+	int "packet full limit"
+        default 35000
+        ---help---
+		Packet full limit size.
+                (Needs to be smaller than packet limit size)?
+                Note that both struct packet recvbufspace[]
+                and sendbufspace[]
+                are sized to four times this value.
+
+config NETUTILS_TINYSSH_PACKET_RECVLIMIT
+	int "receive buffer limit"
+	default 131072
+	---help---
+        	Packet receive limit.
 
 config NETUTILS_TINYSSH_PROGNAME
 	string "Program name"
